@@ -46,7 +46,7 @@ def index_document(uploaded_file: UploadFile) -> str:
         # 3. Fragmentación del Texto (Chunking)
         # --------------------------------------
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=2000,
+            chunk_size=1500,
             chunk_overlap=200,
             length_function=len,
             is_separator_regex=False,
