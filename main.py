@@ -8,9 +8,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Incluir las rutas (endpoints) definidas en nuestro módulo 'app.api.endpoints'
-# Esto organiza la aplicación, separando la definición de la aplicación (aquí)
-# de la lógica de las rutas (en 'endpoints.py').
+# Incluye las rutas de la API
 app.include_router(endpoints.router, prefix="/api/v1")
 
 # Nota: El servidor Uvicorn se ejecutará con este archivo (main:app).

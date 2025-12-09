@@ -1,4 +1,4 @@
-# rag-poc/app/services/rag_pipeline.py
+# rag/app/services/rag_pipeline.py
 
 import os
 import tempfile
@@ -21,8 +21,6 @@ OLLAMA_LLM_MODEL = "llama3"                # Usado para generar la respuesta
 CHROMA_PATH = "chroma_db"                  # Carpeta de la base de datos
 # ----------------------------------------
 
-# (Dejar la función get_ollama_embeddings y index_document intactas aquí)
-# ... (código anterior de index_document) ...
 
 def get_ollama_embeddings() -> OllamaEmbeddings:
     """Inicializa y retorna el objeto de embeddings de Ollama."""
@@ -48,7 +46,7 @@ def index_document(uploaded_file: UploadFile) -> str:
         # 3. Fragmentación del Texto (Chunking)
         # --------------------------------------
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
+            chunk_size=2000,
             chunk_overlap=200,
             length_function=len,
             is_separator_regex=False,
@@ -93,7 +91,7 @@ def query_document(question: str) -> str:
     
     # Convierte el Vector Store en un Retriever.
     # El Retriever busca los fragmentos más relevantes para la pregunta.
-    retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+    retriever = vector_store.as_retriever(search_kwargs={"k": 6})
     # search_kwargs={"k": 3} le dice al Retriever que recupere los 3 
     # fragmentos de texto más relevantes.
 
