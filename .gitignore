@@ -1,0 +1,21 @@
+# Python
+# Entorno virtual
+venv/
+.venv/
+env/
+
+# Archivos de caché
+__pycache__/
+*.pyc
+
+# Archivos de la base de datos ChromaDB
+chroma_db/
+
+# Archivos específicos de la base de datos (por si están fuera de la carpeta)
+chroma.sqlite3
+length.bin
+
+# Archivos temporales generados por el sistema operativo
+*~
+*.swp
+*.log
