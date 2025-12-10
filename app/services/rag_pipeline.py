@@ -138,7 +138,6 @@ def query_document(question: str) -> str:
     # 5. Ejecutar la Cadena
     # ----------------------
     result = qa_chain.invoke({"query": question})
-    print(result["source_documents"]) #para debug
     
     # La respuesta final está en la clave 'result' del diccionario retornado.
     return result["result"]
