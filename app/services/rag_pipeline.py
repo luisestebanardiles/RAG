@@ -46,8 +46,8 @@ def index_document(uploaded_file: UploadFile) -> str:
         # 3. Fragmentación del Texto (Chunking)
         # --------------------------------------
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1500,
-            chunk_overlap=400,
+            chunk_size=800,
+            chunk_overlap=200,
             length_function=len,
             is_separator_regex=False,
         )
@@ -91,7 +91,10 @@ def query_document(question: str) -> str:
     
     # Convierte el Vector Store en un Retriever.
     # El Retriever busca los fragmentos más relevantes para la pregunta.
-    retriever = vector_store.as_retriever(search_kwargs={"k": 6})
+    retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k":10, "fetch_k":30})
+
+    # La llamada a as_retriever() con search_type="mmr" le dice al 
+    # Retriever que use el algoritmo de MMR.
     # search_kwargs={"k": 3} le dice al Retriever que recupere los 3 
     # fragmentos de texto más relevantes.
 
@@ -105,7 +108,7 @@ def query_document(question: str) -> str:
     template = """
     Eres un asistente experto en el análisis de documentos. Tu objetivo es responder a la pregunta del usuario utilizando la información del CONTEXTO.
     
-    Si el contexto proporciona información que permite responder la pregunta, úsala. Si la información no se relaciona, responde que no puedes encontrar los pasos.
+    Si el contexto proporciona información que permite responder la pregunta, úsala. Si la información no se relaciona, explica qué información falta o qué parte del documento deberías revisar.
     
     Responde siempre en español.
 
@@ -126,7 +129,7 @@ def query_document(question: str) -> str:
     # c) Obtiene la respuesta final.
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
-        chain_type="stuff",  # "Stuff": Empaca todo el contexto en una sola prompt.
+         chain_type="map_reduce", # map_reduce es bueno para respuestas más largas y detalladas
         retriever=retriever,
         return_source_documents=False, # Opcional: poner a True para ver qué fragmentos se usaron
         chain_type_kwargs={"prompt": QA_PROMPT}
@@ -135,6 +138,7 @@ def query_document(question: str) -> str:
     # 5. Ejecutar la Cadena
     # ----------------------
     result = qa_chain.invoke({"query": question})
+    print(result["source_documents"]) #para debug
     
     # La respuesta final está en la clave 'result' del diccionario retornado.
     return result["result"]
