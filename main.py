@@ -13,3 +13,9 @@ app.include_router(endpoints.router, prefix="/api/v1")
 
 # Nota: El servidor Uvicorn se ejecutará con este archivo (main:app).
 # Por ejemplo: uvicorn main:app --reload
+
+# en otra terminal debo ejecutar:
+# .\venv\Scripts\activate
+#streamlit run frontend.py
+
+# siempre fijarse que ollama este ejecutandose correctamente (ollama serve)
