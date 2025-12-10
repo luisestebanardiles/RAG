@@ -42,6 +42,11 @@ def index_document(uploaded_file: UploadFile) -> str:
         # ----------------------------------------
         loader = PyPDFLoader(temp_file_path)
         documents = loader.load()
+        
+        for doc in documents:
+            doc.metadata['source'] = uploaded_file.filename 
+            doc.metadata['filename'] = uploaded_file.filename 
+
 
         # 3. Fragmentación del Texto (Chunking)
         # --------------------------------------
@@ -141,3 +146,37 @@ def query_document(question: str) -> str:
     
     # La respuesta final está en la clave 'result' del diccionario retornado.
     return result["result"]
+
+def list_indexed_documents() -> list[str]:
+    """
+    Carga la base de datos de ChromaDB y retorna una lista de los 
+    nombres de archivo únicos (fuentes) que han sido indexados.
+    """
+    try:
+        # Cargar la base de datos de ChromaDB desde el disco.
+        embeddings = get_ollama_embeddings()
+        vector_store = Chroma(
+            persist_directory=CHROMA_PATH,
+            embedding_function=embeddings
+        )
+
+        # Usar el método get() para obtener todos los documentos, 
+        # incluyendo los metadatos.
+        # Solo solicitamos los campos 'metadatas' para eficiencia.
+        all_data = vector_store.get(
+            include=['metadatas']
+        )
+        
+        # Extraer los nombres de archivo únicos (que están en el campo 'source' del metadata).
+        unique_sources = set()
+        for metadata in all_data.get('metadatas', []):
+            filename = metadata.get('filename') 
+            if filename:
+                unique_sources.add(filename)
+
+        return sorted(list(unique_sources))
+
+    except Exception as e:
+        # Si la carpeta ChromaDB no existe o está vacía, retornamos una lista vacía.
+        print(f"Error al listar documentos: {e}")
+        return []

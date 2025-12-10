@@ -15,6 +15,33 @@ class QueryRequest(BaseModel):
     """Esquema para la consulta del usuario."""
     question: str
 
+# NUEVO ENDPOINT: Listar Documentos
+# ====================================================================
+
+@router.get(
+        "/documents/list", 
+        response_model=list[str], 
+        summary="Lista los documentos indexados.",
+        tags=["Documentos"])
+async def list_documents():
+    """
+    Retorna una lista con los nombres de los documentos PDF 
+    que han sido indexados en la base de datos.
+    """
+    try:
+        # Comprobamos si la base de datos existe
+        if not os.path.isdir(rag_pipeline.CHROMA_PATH):
+            return [] # Retorna lista vacía si la base de datos no existe aún
+            
+        return rag_pipeline.list_indexed_documents()
+        
+    except Exception as e:
+        # Manejo de errores en caso de fallo de ChromaDB
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error al listar documentos: {e}"
+        )
+    
 # ====================================================================
 # Endpoint: Consulta (Query)
 # ====================================================================
