@@ -129,7 +129,7 @@ def query_document(question: str) -> str:
     # c) Obtiene la respuesta final.
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
-         chain_type="map_reduce", # map_reduce es bueno para respuestas más largas y detalladas
+         chain_type="stuff", 
         retriever=retriever,
         return_source_documents=False, # Opcional: poner a True para ver qué fragmentos se usaron
         chain_type_kwargs={"prompt": QA_PROMPT}
