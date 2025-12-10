@@ -5,7 +5,7 @@ venv/
 env/
 
 # Archivos de caché
-__pycache__/
+**__pycache__/
 *.pyc
 
 # Archivos de la base de datos ChromaDB
