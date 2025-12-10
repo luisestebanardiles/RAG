@@ -1,4 +1,4 @@
-# rag-poc/app/api/endpoints.py
+# rag/app/api/endpoints.py
 import os
 from fastapi import APIRouter, status, File, UploadFile, HTTPException
 from pydantic import BaseModel # Importamos para definir el esquema de datos de entrada
@@ -53,8 +53,6 @@ def run_query(request: QueryRequest):
             detail=f"Error durante la consulta RAG: {e}"
         )
 
-# (Dejar las rutas /health y /documents/upload intactas aquí)
-# ... (código anterior de /health y /documents/upload) ...
 
 @router.get(
     "/health",
