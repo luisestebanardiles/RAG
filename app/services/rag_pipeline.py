@@ -16,7 +16,7 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
 # --- Configuración de Modelos y Rutas ---
-OLLAMA_EMBEDDING_MODEL = "nomic-embed-text" # Usado para generar vectores
+OLLAMA_EMBEDDING_MODEL = "all-minilm" # Usado para generar vectores
 OLLAMA_LLM_MODEL = "llama3"                # Usado para generar la respuesta
 CHROMA_PATH = "chroma_db"                  # Carpeta de la base de datos
 # ----------------------------------------
@@ -47,7 +47,7 @@ def index_document(uploaded_file: UploadFile) -> str:
         # --------------------------------------
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1500,
-            chunk_overlap=200,
+            chunk_overlap=400,
             length_function=len,
             is_separator_regex=False,
         )
@@ -103,11 +103,12 @@ def query_document(question: str) -> str:
 # 3. CREAR LA PLANTILLA DE PROMPT CON INSTRUCCIÓN EN ESPAÑOL
     # --------------------------------------------------------
     template = """
-    Eres un asistente experto en el análisis de documentos. Tu tarea es responder a la pregunta del usuario.
-    Utiliza **SOLO** el siguiente contexto proporcionado para responder. 
-    Si la respuesta no se encuentra en el contexto, indica amablemente que la información no está disponible.
+    Eres un asistente experto en el análisis de documentos. Tu objetivo es responder a la pregunta del usuario utilizando la información del CONTEXTO.
     
-    **INSTRUCCIÓN CRÍTICA: Responde siempre en español, sin importar el idioma de la pregunta o el contexto.**
+    Busca los pasos, etapas o procesos mencionados en el contexto para responder a la pregunta.
+    Si el contexto proporciona información que permite responder la pregunta, úsala. Si la información no se relaciona, responde que no puedes encontrar los pasos.
+    
+    Responde siempre en español.
 
     Contexto: {context}
     Pregunta: {question}
