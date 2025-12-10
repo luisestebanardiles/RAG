@@ -105,7 +105,6 @@ def query_document(question: str) -> str:
     template = """
     Eres un asistente experto en el análisis de documentos. Tu objetivo es responder a la pregunta del usuario utilizando la información del CONTEXTO.
     
-    Busca los pasos, etapas o procesos mencionados en el contexto para responder a la pregunta.
     Si el contexto proporciona información que permite responder la pregunta, úsala. Si la información no se relaciona, responde que no puedes encontrar los pasos.
     
     Responde siempre en español.
