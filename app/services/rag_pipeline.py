@@ -100,8 +100,10 @@ def query_document(question: str) -> str:
 
     # La llamada a as_retriever() con search_type="mmr" le dice al 
     # Retriever que use el algoritmo de MMR.
-    # search_kwargs={"k": 3} le dice al Retriever que recupere los 3 
+    # search_kwargs={"k": 10} le dice al Retriever que recupere los 10 
     # fragmentos de texto más relevantes.
+    #fetch_K: 30 le dice al Retriever que considere los 30 fragmentos
+    # más relevantes antes de aplicar MMR para seleccionar los mejores k.
 
     # 2. Inicializar el LLM de Ollama
     # ---------------------------------
@@ -134,7 +136,7 @@ def query_document(question: str) -> str:
     # c) Obtiene la respuesta final.
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
-         chain_type="stuff", 
+         chain_type="stuff", #chain_type="stuff", es el más simple: inserta todo el contexto en el prompt.
         retriever=retriever,
         return_source_documents=False, # Opcional: poner a True para ver qué fragmentos se usaron
         chain_type_kwargs={"prompt": QA_PROMPT}
