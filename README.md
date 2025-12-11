@@ -1,5 +1,5 @@
 # Sistema RAG con Ollama + FastAPI + Streamlit + ChromaDB
-Este proyecto implementa un sistema de Recuperación Aumentada con Generación (RAG) que permite realizar preguntas sobre documentos PDF proporcionados por el usuario, utilizando un modelo de lenguaje local (LLM).
+Este proyecto implementa un sistema de Recuperación Aumentada con Generación (RAG) que permite realizar preguntas sobre documentos PDF proporcionados por el usuario, utilizando un modelo LLM local.
 
 - **Interfaz de usuario**: desarrollada en Streamlit.
 
